@@ -499,5 +499,79 @@ Future<void> executeGoEngine(String command, String arg) async {
   });
 }
 GOOS=android GOARCH=arm64 go build -o ../terminal_app/assets/bin/dr-terminal main.go
+// [DR-SYSTEM] Core Engine - Versión Estable
+package main
+
+import (
+	"fmt"
+	"os"
+	"os/exec"
+	"strings"
+)
+
+func systemExec(isRoot bool, name string, args []string) {
+	var cmd *exec.Cmd
+	if isRoot {
+		// Requiere que el dispositivo tenga Root (Magisk/KernelSU)
+		fullCmd := name + " " + strings.Join(args, " ")
+		cmd = exec.Command("su", "-c", fullCmd)
+	} else {
+		cmd = exec.Command(name, args...)
+	}
+
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Printf("\n[DR-SYSTEM][ERROR] %v\n", err)
+	}
+	fmt.Print(string(out))
+}
+
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("[DR-SYSTEM] Ready. Waiting for commands...")
+		return
+	}
+
+	command := os.Args[1]
+
+	switch command {
+	case "install":
+		if len(os.Args) < 3 { return }
+		fmt.Printf("\r\n[DR-SYSTEM] Deploying: %s...\n", os.Args[2])
+		// Aquí va tu lógica de unzip/download
+		fmt.Printf("[DR-SYSTEM] %s ready.\n", os.Args[2])
+
+	case "whois":
+		if len(os.Args) < 3 { return }
+		// Asegúrate de tener busybox en el path de la app
+		systemExec(false, "busybox", []string{"whois", os.Args[2]})
+
+	default:
+		// Ejecuta comandos estándar usando busybox (ls, top, ifconfig)
+		systemExec(false, "busybox", os.Args[1:])
+	}
+}
+// [DR-SYSTEM] Flutter Handler
+Future<void> executeGoEngine(String command, List<String> args) async {
+  final directory = await getApplicationDocumentsDirectory();
+  final path = '${directory.path}/dr-terminal';
+  
+  // Incluimos la carpeta interna en el PATH para que reconozca a busybox
+  final env = {"PATH": "${directory.path}:${Platform.environment['PATH']}"};
+
+  try {
+    final process = await Process.start(path, [command, ...args], environment: env);
+    
+    process.stdout.transform(utf8.decoder).listen((data) {
+      terminal.write(data.replaceAll('\n', '\r\n')); // Ajuste para terminales xterm
+    });
+
+    process.stderr.transform(utf8.decoder).listen((data) {
+      terminal.write('\r\n[L-ERROR] $data');
+    });
+  } catch (e) {
+    terminal.write('\r\n[FATAL] No se pudo iniciar el motor: $e');
+  }
+}
 
 chmod 755
