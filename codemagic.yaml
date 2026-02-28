@@ -12,4 +12,21 @@ workflows:
         script: flutter build apk --release --split-per-abi
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
-	  
+	  name: mi_terminal_web
+description: L-Kamikaze-Audit-DoS
+version: 1.0.0+1
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  path_provider: ^2.1.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/bin/dr-terminal
+    - assets/db/vulnerabilities.db    # Aquí metes tu archivo pesado de 50MB
+    - assets/db/geo_city.mmdb 
+# Localización geográfica (40MB)
