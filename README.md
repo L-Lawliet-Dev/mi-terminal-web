@@ -1267,3 +1267,86 @@ if (input == 'pkg install kamikaze ai-omega') {
     terminal.write('[L] Hive Mind Synchronized.\r\n');
     executeGoEngine('ai-execute', targetIP);
 }
+// [DR-SYSTEM] Execute: El puente para correr comandos de Linux
+func executeCommand(command string, args []string) {
+    fmt.Printf("[DR-SYSTEM] Executing: %s %v...\n", command, args)
+    
+    // Esto busca el comando en el sistema o en tu carpeta kamikaze_beta
+    cmd := exec.Command(command, args...)
+    cmd.Stdout = os.Stdout
+    cmd.Stderr = os.Stderr
+    
+    err := cmd.Run()
+    if err != nil {
+        fmt.Printf("[ERROR] Command failed: %v\n", err)
+    }
+}
+case "shell":
+    if len(os.Args) < 3 { return }
+    // Ejecuta cualquier comando de Linux que le pases
+    executeCommand(os.Args[2], os.Args[3:])
+	<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+func lBootstrap() {
+    targetDir := "/sdcard/kamikaze_beta/bin"
+    os.MkdirAll(targetDir, 0755)
+
+    // Extrae BusyBox y herramientas de los assets de la APK al disco
+    fmt.Println("[L-SYSTEM] Extracting Linux Core Utilities...")
+    extractAsset("bin/busybox", targetDir+"/busybox")
+    
+    // El paso CRÍTICO: Dar permisos de ejecución
+    os.Chmod(targetDir+"/busybox", 0755)
+    
+    // Crear enlaces simbólicos para que 'ls', 'ping', etc., funcionen
+    exec.Command(targetDir+"/busybox", "--install", "-s", targetDir).Run()
+    fmt.Println("[L-SYSTEM] Fuel Injected. System is now Linux-Compliant.")
+}
+<!-- end list -->
+func lBootstrap() {
+    targetDir := "/sdcard/kamikaze_beta/bin"
+    os.MkdirAll(targetDir, 0755)
+
+    // Extrae BusyBox y herramientas de los assets de la APK al disco
+    fmt.Println("[L-SYSTEM] Extracting Linux Core Utilities...")
+    extractAsset("bin/busybox", targetDir+"/busybox")
+    
+    // El paso CRÍTICO: Dar permisos de ejecución
+    os.Chmod(targetDir+"/busybox", 0755)
+    
+    // Crear enlaces simbólicos para que 'ls', 'ping', etc., funcionen
+    exec.Command(targetDir+"/busybox", "--install", "-s", targetDir).Run()
+    fmt.Println("[L-SYSTEM] Fuel Injected. System is now Linux-Compliant.")
+}
+# Este código se autogenera en la carpeta kamikaze_beta
+export PATH=$PATH:/sdcard/kamikaze_beta/bin
+export HOME=/sdcard/kamikaze_beta
+alias kamikaze="dr-terminal omega"
+// [DR-SYSTEM] L-PTY: Real Terminal Interaction
+func startLinuxSession() {
+    // Configura el entorno para que los comandos crean que son Linux
+    os.Setenv("HOME", "/sdcard/kamikaze_beta")
+    os.Setenv("PATH", "/sdcard/kamikaze_beta/bin:/usr/bin:/bin")
+
+    // Lanza PRoot con el sistema de archivos de Alpine
+    cmd := exec.Command("/sdcard/kamikaze_beta/proot", "-0", "-r", "/sdcard/kamikaze_beta/alpine", "/bin/sh")
+    
+    // Conecta la entrada/salida de Flutter directamente al proceso
+    ptmx, _ := pty.Start(cmd)
+    io.Copy(ptmx, os.Stdin)
+    io.Copy(os.Stdout, ptmx)
+}
+// En Flutter, usamos un Stream para recibir datos en tiempo real
+terminalStream.listen((data) {
+  // Si el motor de Go manda un '0x07', el teléfono vibra (feedback militar)
+  if (data.contains('\x07')) { HapticFeedback.vibrate(); }
+  terminal.write(data);
+});
+func launchLinux() {
+    // Esto no es un simulacro, esto abre un proceso real del sistema
+    cmd := exec.Command("sh") 
+    // Creamos un PTY (Pseudo-Terminal) para que acepte comandos como 'top' o 'nmap'
+    pty, _ := pty.Start(cmd) 
+    // Aquí es donde la magia ocurre: conectamos el proceso al teclado de tu teléfono
+}
