@@ -1,63 +1,15 @@
-mi-terminal-web/
-├── codemagic.yaml         <-- El manual de instrucciones
-├── core-engine/           <-- Carpeta para Go
-│   └── main.go            <-- El código de Go que pasaste
-└── terminal_app/          <-- Carpeta para Flutter
-    ├── pubspec.yaml       <-- Configuración de la App
-    └── lib/
-        └── main.dart      <-- La interfaz de la terminal
-		package main
-import (
-	"fmt"
-	"io"
-	"net/http"
-	"os"
-)
-func downloadFile(pkgName string) {
-	fmt.Printf("\r\n[DR-SYSTEM] Downloading %s from server...\n", pkgName)
-	url := "https://example.com/packages/" + pkgName 
-	resp, err := http.Get(url)
-	if err != nil {
-		fmt.Printf("[ERROR] Could not connect: %v\n", err)
-		return
-	}
-	defer resp.Body.Close()
-	fmt.Printf("[DR-SYSTEM] Success: %s (Status: %s)\n", pkgName, resp.Status)
-}
-func main() {
-	if len(os.Args) < 3 {
-		fmt.Println("Usage: dr-terminal install [package_name]")
-		return
-	}
-	command := os.Args[1]
-	packageName := os.Args[2]
-	if command == "install" {
-		downloadFile(packageName)
-	} else {
-		fmt.Printf("Unknown command: %s\n", command)
-	}
-}
-void handleTerminalInput(String input) {
-  if (input == 'pkg install DR') {
-    terminal.write('\r\n[SYSTEM] Starting DR Deployment...\r\n');
-    executeGoEngine('install', 'DR'); 
-  } else {
-    terminal.write('\r\nCommand not found: $input\r\n');
-  }
-}
 workflows:
   android-terminal:
     name: L-OVERLORD-BUILDER
+    max_build_duration: 30
+    instance_type: mac_mini_m1
     scripts:
-      - name: Build Core
-        script: |
-          cd core-engine
-          go build -o ../terminal_app/assets/bin/dr-terminal main.go
-      - name: Prepare App
-        script: |
-          cd terminal_app
-          flutter pub get
-          flutter build apk --release
+      - name: Setup Folders
+        script: mkdir -p assets/bin
+      - name: Build Go Engine
+        script: go build -o assets/bin/dr-terminal main.go
+      - name: Build Flutter APK
+        script: flutter build apk --release --split-per-abi
     artifacts:
-      - terminal_app/build/app/outputs/flutter-apk/*.apk
+      - build/app/outputs/flutter-apk/*.apk
 	  
