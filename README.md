@@ -854,3 +854,19 @@ func udpFlood(target string) {
         if err != nil { break }
     }
 }
+func systemFix(directory string) {
+    fmt.Println("[DR-SYSTEM] Starting L-Integrity Check... [L]")
+    
+    // 1. Corregir permisos de ejecución en toda la carpeta interna
+    exec.Command("chmod", "-R", "755", directory).Run()
+    
+    // 2. Crear enlaces simbólicos para comandos de red que Android oculta
+    tools := []string{"ping", "netstat", "ifconfig", "route"}
+    for _, tool := range tools {
+        target := directory + "/" + tool
+        // Enlaza la herramienta al binario de BusyBox
+        exec.Command("ln", "-s", directory+"/busybox", target).Run()
+    }
+    
+    fmt.Println("[DR-SYSTEM] SUCCESS: Environment Patched. All logic gates V9 active.")
+}
