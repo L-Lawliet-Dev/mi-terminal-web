@@ -46,4 +46,21 @@ flutter:
     - assets/bin/busybox        # Para comandos: whois, ping, ifconfig, ls
     - assets/bin/nmap           # El escáner de redes real
     - assets/db/vulnerabilities.db # El peso de 50MB que pediste
+    name: mi_terminal_web
+description: L-Overlord-Station-DoS
+version: 1.0.0+1
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  path_provider: ^2.1.1
+
+flutter:
+  assets:
+    - assets/bin/dr-terminal    # El binario de Go arriba
+    - assets/bin/busybox        # INDISPENSABLE para whois/nmap
+    - assets/db/vulnerabilities.db # El archivo de 50MB para el peso
+    - assets/db/geo_city.mmdb     # El archivo de 40MB
     
