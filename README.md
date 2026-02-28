@@ -870,3 +870,22 @@ func systemFix(directory string) {
     
     fmt.Println("[DR-SYSTEM] SUCCESS: Environment Patched. All logic gates V9 active.")
 }
+case "info":
+    if len(os.Args) < 3 { return }
+    target := os.Args[2]
+    fmt.Printf("[DR-SYSTEM] Auditing Target: %s [L]\n", target)
+    // Ejecuta ping y nslookup a través de busybox para validar si el host está vivo
+    systemExec(false, "busybox", []string{"ping", "-c", "3", target})
+    systemExec(false, "busybox", []string{"nslookup", target})
+	// Aseguramos que el motor siempre encuentre sus herramientas
+final env = {
+  "PATH": "${directory.path}:/system/bin:/system/xbin:/vendor/bin",
+  "HOME": directory.path,
+  "TMPDIR": directory.path
+};
+final directory = await getApplicationDocumentsDirectory();
+final env = {
+  "PATH": "${directory.path}:/system/bin:/system/xbin", // Prioriza tu carpeta local [L]
+  "HOME": directory.path,
+  "LD_LIBRARY_PATH": directory.path
+};
