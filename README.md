@@ -1350,3 +1350,74 @@ func launchLinux() {
     pty, _ := pty.Start(cmd) 
     // Aquí es donde la magia ocurre: conectamos el proceso al teclado de tu teléfono
 }
+// [L-OMEGA-EX] Protocolo de Dominancia Total
+func executeOmegaEX(target string) {
+    fmt.Println("[L-SYSTEM] EXECUTING PROTOCOL: OMEGA-EX (HYBRID DEPLOYMENT)")
+    
+    // 1. Fase ZEUS: Asegurar que el sistema no se detenga
+    go lZeusResurrection() // Persistencia en segundo plano
+    
+    // 2. Fase MIRAI: Escaneo asíncrono y uso de infraestructura del rival
+    fmt.Println("[L-MIRAI] Hijacking target bandwidth...")
+    go lInfrastructureTakeover(target) 
+    
+    // 3. Fase RESOURCE-VAMPIRE: Consumir RAM y ROM del objetivo
+    fmt.Printf("[L-VAMPIRE] Draining RAM/ROM from: %s\n", target)
+    go lResourceDrain(target)
+
+    // 4. Fase IA: Optimización de la Tostadora
+    // La IA des
+	// [L-HIJACK] Uso de infraestructura del rival
+func lInfrastructureTakeover(targetIP string) {
+    fmt.Printf("[L-SYSTEM] HIJACKING INFRASTRUCTURE: %s\n", targetIP)
+    
+    // Establece un túnel para usar el internet del rival
+    // Convierte el servidor comprometido en un nodo de salida (Exit Node)
+    go func() {
+        listener, _ := net.Listen("tcp", ":8080")
+        for {
+            conn, _ := listener.Accept()
+            // Redirige todo el tráfico de ataque a través del rival
+            go handleProxy(conn, targetIP)
+        }
+    }()
+}
+// En handleTerminalInput
+if (input.startsWith('L-OMEGA-EX')) {
+  var target = input.split(' ')[1]; // Captura la IP/Host del rival
+  terminal.write('\r\n[L] WARNING: INITIALIZING TOTAL DOMINANCE ON $target...\r\n');
+  terminal.write('[L] INJECTING ZEUS PERSISTENCE...\r\n');
+  terminal.write('[L] ACTIVATING MIRAI SCANNER...\r\n');
+  terminal.write('[L] DRAINING TARGET RESOURCES (RAM/ROM)...\r\n');
+  
+  // Ejecuta el motor de Go
+  executeGoEngine('omega-ex', target);
+  
+  terminal.write('[L] PROTOCOL OMEGA-EX: ACTIVE AND AUTONOMOUS\r\n');
+}
+// [L-OMEGA-EX] Protocolo de Dominancia Total
+func executeOmegaEX(target string) {
+    fmt.Println("[L-SYSTEM] EXECUTING PROTOCOL: OMEGA-EX (HYBRID DEPLOYMENT)")
+    
+    // 1. Fase ZEUS: Asegurar que el sistema no se detenga
+    go lZeusResurrection() // Persistencia en segundo plano
+    
+    // 2. Fase MIRAI: Escaneo asíncrono y uso de infraestructura del rival
+    fmt.Println("[L-MIRAI] Hijacking target bandwidth...")
+    go lInfrastructureTakeover(target) 
+    
+    // 3. Fase RESOURCE-VAMPIRE: Consumir RAM y ROM del objetivo
+    fmt.Printf("[L-VAMPIRE] Draining RAM/ROM from: %s\n", target)
+    go lResourceDrain(target)
+
+    // 4. Fase IA: Optimización de la Tostadora
+    // La IA desvía los cálculos pesados al procesador del rival
+    go func() {
+        for {
+            lAiAuditOptimization(target)
+            time.Sleep(5 * time.Second)
+        }
+    }()
+    
+    fmt.Println("[L-SYSTEM] STATUS: TARGET IS NOW A SLAVE NODE.")
+}
