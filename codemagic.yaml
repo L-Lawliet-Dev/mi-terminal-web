@@ -10,4 +10,3 @@ workflows:
         script: flutter build apk --release --split-per-abi
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
-      
