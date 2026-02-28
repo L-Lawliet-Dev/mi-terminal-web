@@ -10,4 +10,16 @@ workflows:
         script: flutter build apk --release --split-per-abi
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
-      
+      name: mi_terminal_web
+description: L-Terminal-Overlord
+version: 1.0.0+1
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  path_provider: ^2.1.1
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/bin/
