@@ -889,3 +889,16 @@ final env = {
   "HOME": directory.path,
   "LD_LIBRARY_PATH": directory.path
 };
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+# Para dispositivos modernos (64 bits)
+GOOS=android GOARCH=arm64 go build -o assets/bin/dr-terminal-64 main.go
+
+# Para dispositivos antiguos o "tostadoras" (32 bits)
+GOOS=android GOARCH=arm go build -o assets/bin/dr-terminal-32 main.go
+flutter build apk --release --split-per-abi
+import 'dart:io';
+// ... dentro de setupEngine ...
+String arch = Platform.version.contains("aarch64") ? "dr-64" : "dr-32";
+final exePath = '${directory.path}/$arch';
