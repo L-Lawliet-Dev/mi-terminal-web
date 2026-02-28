@@ -23,3 +23,103 @@ flutter:
   uses-material-design: true
   assets:
     - assets/bin/
+# mi-terminal-web
+ C + Go
+# Correct sequence
+mkdir core-engine
+cd core-engine
+go mod init mi-terminal/core
+touch main.go
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func installPackage(pkgName string) {
+	fmt.Printf("\r\n[DR-SYSTEM] Fetching package: %s...\n", pkgName)
+	// Add your download logic here later
+	fmt.Printf("[DR-SYSTEM] Success: %s installed.\n", pkgName)
+}
+
+func main() {
+	// Check if there are enough arguments
+	if len(os.Args) < 3 {
+		fmt.Println("Usage: dr-terminal install [package_name]")
+		return
+	}
+if command == "install" {
+		installPackage(packageName)
+	} else {
+		fmt.Printf("Unknown command: %s\n", command)
+	} // Cierra el else
+} // Cierra la función main
+// Logic to handle the custom command
+void handleTerminalInput(String input) {
+  if (input == 'pkg install DR') {
+    terminal.write('\r\n[SYSTEM] Starting DR Deployment...\r\n');
+    // Aquí es donde Flutter ejecuta el binario 'dr-terminal' que hiciste en Go
+    executeGoEngine('install', 'DR'); 
+  } else {
+    terminal.write('\r\nCommand not found: $input\r\n');
+  }
+}
+flutter:
+  assets:
+    - assets/bin/dr-terminal
+	command := os.Args[1]
+	packageName := os.Args[2]
+
+	if command == "install" {
+		installPackage(packageName)
+	} else {
+		fmt.Printf("Unknown command: %s\n", command)
+  ### Setup Commands
+1. Build Core: `cd core-engine && go build -o dr-terminal main.go`
+2. Prepare App: `cd ../terminal_app && flutter pub get`
+3. Run: `flutter run`
+
+### Terminal Commands (Inside the App)
+- `pkg install DR` -> High-speed system deployment.
+- package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+)
+
+func downloadFile(pkgName string) {
+	fmt.Printf("\r\n[DR-SYSTEM] Downloading %s from server...\n", pkgName)
+	
+	// Ejemplo de URL (puedes cambiarla por tu propio servidor de paquetes)
+	url := "https://example.com/packages/" + pkgName 
+	
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Printf("[ERROR] Could not connect: %v\n", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	fmt.Printf("[DR-SYSTEM] Success: %s (Status: %s)\n", pkgName, resp.Status)
+}
+
+func main() {
+	if len(os.Args) < 3 {
+		fmt.Println("Usage: dr-terminal install [package_name]")
+		return
+	}
+
+	// Estas líneas faltaban en tu versión:
+	command := os.Args[1]
+	packageName := os.Args[2]
+
+	if command == "install" {
+		downloadFile(packageName)
+	} else {
+		fmt.Printf("Unknown command: %s\n", command)
+	}
+}
