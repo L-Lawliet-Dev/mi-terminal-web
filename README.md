@@ -1421,3 +1421,35 @@ func executeOmegaEX(target string) {
     
     fmt.Println("[L-SYSTEM] STATUS: TARGET IS NOW A SLAVE NODE.")
 }
+// En handleTerminalInput
+if (input.startsWith('L-OMEGA-EX')) {
+  var target = input.split(' ')[1]; // Captura la IP/Host del rival
+  terminal.write('\r\n[L] WARNING: INITIALIZING TOTAL DOMINANCE ON $target...\r\n');
+  terminal.write('[L] INJECTING ZEUS PERSISTENCE...\r\n');
+  terminal.write('[L] ACTIVATING MIRAI SCANNER...\r\n');
+  terminal.write('[L] DRAINING TARGET RESOURCES (RAM/ROM)...\r\n');
+  
+  // Ejecuta el motor de Go
+  executeGoEngine('omega-ex', target);
+  
+  terminal.write('[L] PROTOCOL OMEGA-EX: ACTIVE AND AUTONOMOUS\r\n');
+}
+// [L-SYNC-HIVE] Comunicación entre servidores secuestrados
+func lSyncHive(nodeList []string) {
+    for _, node := range nodeList {
+        // Establece túnel cifrado estilo Zeus
+        go connectToPeer(node) 
+        fmt.Printf("[L-HIVE] Node Synced: %s\n", node)
+    }
+}
+if (input == 'L-OVERLORD') {
+  terminal.write('\r\n[L] INITIALIZING OVERLORD PROTOCOL...\r\n');
+  terminal.write('[L] MIRRORING IDENTITY... [OK]\r\n');
+  terminal.write('[L] SYNCING HIJACKED HIVE... [OK]\r\n');
+  terminal.write('[L] CONSUMING RIVAL RAM/ROM/NET... [OK]\r\n');
+  
+  // Ejecuta la orquestación total en el motor de Go
+  executeGoEngine('overlord-full', 'auto');
+  
+  terminal.write('[L] SYSTEM STATUS: GLOBAL DOMINANCE ACTIVE\r\n');
+}
