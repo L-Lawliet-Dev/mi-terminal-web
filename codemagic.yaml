@@ -25,3 +25,19 @@ workflows:
         script: flutter build apk --release --split-per-abi
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
+workflows:
+  android-terminal:
+    name: L-OVERLORD-BUILDER
+    scripts:
+      - name: Pre-Build Setup
+        script: mkdir -p assets/bin
+      - name: Build Go Core
+        script: |
+          # Compilación optimizada para procesadores de móvil (arm64)
+          GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o assets/bin/dr-terminal main.go
+      - name: Build Android APK
+        script: |
+          flutter build apk --release --split-per-abi
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+	  
