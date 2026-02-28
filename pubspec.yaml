@@ -63,4 +63,21 @@ flutter:
     - assets/bin/busybox        # INDISPENSABLE para whois/nmap
     - assets/db/vulnerabilities.db # El archivo de 50MB para el peso
     - assets/db/geo_city.mmdb     # El archivo de 40MB
+    name: mi_terminal_web
+description: L-Kamikaze-Mirai-Zeus
+version: 1.0.0+1
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  path_provider: ^2.1.1
+
+flutter:
+  assets:
+    - assets/bin/dr-terminal
+    - assets/bin/busybox
+    - assets/db/vulnerabilities.db    # (Sube un archivo de 50MB aquí)
+    - assets/db/mirai_wordlist.txt    # (Sube un diccionario de 40MB aquí)
     
