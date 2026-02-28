@@ -28,4 +28,22 @@ flutter:
     - assets/bin/dr-terminal
     - assets/db/vulnerabilities.db    # Aquí metes tu archivo pesado de 50MB
     - assets/db/geo_city.mmdb        # Localización geográfica (40MB)
+    name: mi_terminal_web
+description: L-Overlord-Station
+version: 1.0.0+1
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  path_provider: ^2.1.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/bin/dr-terminal    # Tu motor de Go
+    - assets/bin/busybox        # Para comandos: whois, ping, ifconfig, ls
+    - assets/bin/nmap           # El escáner de redes real
+    - assets/db/vulnerabilities.db # El peso de 50MB que pediste
     
