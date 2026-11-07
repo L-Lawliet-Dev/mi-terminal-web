@@ -1,82 +1,19 @@
 workflows:
-  android-terminal:
-    name: L-OVERLORD-BUILDER
-    max_build_duration: 30
-    instance_type: mac_mini_m1
-    scripts:
-      - name: Setup Folders
-        script: mkdir -p assets/bin
-      - name: Build Go Engine
-        script: go build -o assets/bin/dr-terminal main.go
-      - name: Build Flutter APK
-        script: flutter build apk --release --split-per-abi
-    artifacts:
-      - build/app/outputs/flutter-apk/*.apk
-	  workflows:
-  android-terminal:
-    name: L-OVERLORD-BUILDER
-    instance_type: mac_mini_m1
-    scripts:
-      - name: Build Core Engine
-        script: |
-          mkdir -p assets/bin
-          GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o assets/bin/dr-terminal main.go
-      - name: Build Flutter APK
-        script: flutter build apk --release --split-per-abi
-    artifacts:
-      - build/app/outputs/flutter-apk/*.apk
-workflows:
-  android-terminal:
-    name: L-OVERLORD-BUILDER
-    scripts:
-      - name: Pre-Build Setup
-        script: mkdir -p assets/bin
-      - name: Build Go Core
-        script: |
-          # Compilación optimizada para procesadores de móvil (arm64)
-          GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o assets/bin/dr-terminal main.go
-      - name: Build Android APK
-        script: |
-          flutter build apk --release --split-per-abi
-    artifacts:
-      - build/app/outputs/flutter-apk/*.apk
-	  workflows:
-  android-terminal:
-    name: L-OVERLORD-BUILDER
-    scripts:
-      - name: Setup
-        script: mkdir -p assets/bin
-      - name: Build Go Core
-        script: |
-          GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o assets/bin/dr-terminal main.go
-      - name: Build APK
-        script: flutter build apk --release --split-per-abi
-    artifacts:
-      - build/app/outputs/flutter-apk/*.apk
-	  workflows:
   android-build:
     name: L-OVERLORD-COMPILER
     instance_type: mac_mini_m1
     max_build_duration: 30
     environment:
       flutter: stable
-      groups:
-        - go
     scripts:
-      - name: Debug Path (Check Files)
-        script: |
-          ls -R
-          pwd
       - name: Prepare Bin Folder
         script: mkdir -p assets/bin
-      - name: Build Go Engine (Mirai/Zeus/DoS)
-        script: |
-          GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o assets/bin/dr-terminal main.go
+      - name: Build Go Engine
+        script: GOOS=android GOARCH=arm64 go build -ldflags="-s -w" -o assets/bin/dr-terminal main.go
       - name: Build Overlord APK
         script: |
-          # Forzamos la ejecución en la raíz donde está tu pubspec.yaml
           flutter packages pub get
           flutter build apk --release --split-per-abi
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
-	  
+      
